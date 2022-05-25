@@ -6,14 +6,259 @@
 //
 
 import UIKit
-
-class ViewController: UIViewController {
-
+import MapKit
+import CoreLocationUI
+import RealmSwift
+import SwiftUI
+class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate{
+    let realm = try! Realm()
+    
+    let dt = Date()
+    let dateFormatter = DateFormatter()
+    var  dateString:String!
+    var photoInfo = PhotoInfo()
+    
+    
+    
+    var locationManager:CLLocationManager!
+    var didStartUpdatingLocation = false
+    var searchMapItems:[MKMapItem] = []
+    var currentLocation:CLLocation!
+    @IBOutlet weak var mapView: MKMapView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//        createLocationButton()
         // Do any additional setup after loading the view.
     }
-
-
+    override func viewDidAppear(_ animated: Bool) {
+        initLocation()
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        showPins()
+    }
+    
+//    private func createLocationButton() {
+//        let button = CLLocationButton(frame: CGRect(x:0,
+//                                                    y:0,
+//                                                    width:self.view.frame.width/12,
+//                                                    height:40))
+//        button.layer.cornerRadius = 8.0
+//
+//        button.icon = .arrowFilled
+//        button.center  = CGPoint(x: view.center.x + 100, y: view.center.y + 300)
+//        button.cornerRadius = 20.0
+//        self.view.addSubview(button)
+//        button.addTarget(self, action: #selector(requestCurrentLocation), for: .touchUpInside)
+//
+//
+//    }
+    @IBAction func requestCurrentLocation() {
+        self.locationManager.startUpdatingLocation()
+    }
+    private func initLocation() {
+        if !CLLocationManager.locationServicesEnabled() {
+            print("NO location service")
+            return
+        }
+        switch CLLocationManager.authorizationStatus(){
+        case.notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+            
+            
+        case .restricted,.denied:
+            showPermissionAlert()
+            
+        case .authorizedAlways,.authorizedWhenInUse:
+            if !didStartUpdatingLocation{
+                didStartUpdatingLocation = true
+                locationManager.startUpdatingLocation()
+            }
+        @unknown default:
+            break
+        }
+        
+        
+    }
+    private func showPermissionAlert(){
+        let alert = UIAlertController(title: "位置情報の取得",
+                                      message: "設定アプリから位置情報の使用を許可してください",
+                                      preferredStyle: .alert)
+        let goToSetting = UIAlertAction(title: "設定アプリを開く", style: .default) { _ in
+            guard let settingUrl = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            if UIApplication.shared.canOpenURL(settingUrl){
+                UIApplication.shared.open(settingUrl,completionHandler: nil)
+            }
+            
+        }
+        let cancelAction = UIAlertAction(title: NSLocalizedString("キャンセル", comment: ""), style: .cancel){ (_) in
+            self.dismiss(animated: true,completion: nil)
+            
+        }
+        alert.addAction(goToSetting)
+        
+        alert.addAction(cancelAction)
+        
+        self.present(alert,animated: true,completion: nil)
+    }
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            if !didStartUpdatingLocation{
+                didStartUpdatingLocation = true
+                locationManager.startUpdatingLocation()
+            }
+        }else if status == .restricted || status == .denied {
+            showPermissionAlert()
+            
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Failed to find user's")
+    }
+    
+    private func updateMap(){
+        
+        print("Location:\(currentLocation?.coordinate.latitude),\(currentLocation.coordinate.longitude)")
+        let now = Date()
+        let delta = now.timeIntervalSince(currentLocation.timestamp)
+        print("This location was obtained \(delta)second ago")
+        if delta > 70{
+            print("too old")
+            return
+        }
+        
+        let horizontalRegionInaMeters: Double = 5000
+        let width = self.mapView.frame.width
+        let height = self.mapView.frame.height
+        let verticalRegionInMeters = Double(height / width * CGFloat(horizontalRegionInaMeters))
+        
+        let region:MKCoordinateRegion = MKCoordinateRegion(center: currentLocation.coordinate,
+                                                           latitudinalMeters:  verticalRegionInMeters,
+                                                           longitudinalMeters: horizontalRegionInaMeters)
+        mapView.setRegion(region, animated: true)
+        
+    }
+    
+    private func showPins(){
+        guard let currentLocation = currentLocation else {return}
+        let  annotation = MKPointAnnotation()
+        annotation.coordinate = CLLocationCoordinate2DMake (currentLocation.coordinate.latitude,currentLocation.coordinate.longitude)
+        mapView.addAnnotation(annotation)
+    }
+    
+    func presentPickerController(sourceType:UIImagePickerController.SourceType){
+        if UIImagePickerController.isSourceTypeAvailable(sourceType){
+            let picker = UIImagePickerController()
+            picker.sourceType = sourceType
+            picker.delegate = self
+            self.present(picker,animated: true,completion: nil)
+        }
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            return picker.dismiss(animated: true) }
+        let imageURLStr =   saveImage(image: image)
+        photoInfo.imageFileName = imageURLStr
+        photoInfo.createdAt = dateString
+        photoInfo.latitude = currentLocation.coordinate.latitude
+        photoInfo.longtitude = currentLocation.coordinate.longitude
+        
+        
+        try!realm.write({
+            realm.add(photoInfo)
+        })
+        
+        picker.dismiss(animated: true)
+        
+        
+    }
+    func dateGet() -> String{
+        
+        // DateFormatter を使用して書式とロケールを指定する
+        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHms", options: 0, locale: Locale(identifier: "ja_JP"))
+        dateString = dateFormatter.string(from: Date())
+        print(dateString)
+        return dateString
+        
+        
+        
+        print(dateFormatter.string(from: dt))
+        return dateString
+    }
+    
+    
+    @IBAction func onTappedCameraButton(_ sender: Any) {
+        presentPickerController(sourceType: .camera)
+        updateMap()
+        dateGet()
+    }
+    
+    //    func saveLocationLatitude() {
+    //        guard let  nowLatitude = currentLocation.coordinate.latitude else {return}
+    //        let photoInfo = PhotoInfo()
+    //        photoInfo.latitude = nowLatitude
+    //        try! realm.write({
+    //            realm.add(photoInfo)
+    //        })
+    //
+    //
+    //
+    //    }
+    //    func saveLocationLongitude() {
+    //
+    //    }
+    //
+    //
+    
+    
+    func saveImage(image: UIImage) -> String? {
+        guard let imageData = image.jpegData(compressionQuality: 1.0) else { return nil }
+        
+        do {
+            let fileName = UUID().uuidString + ".jpeg" // ファイル名を決定(UUIDは、ユニークなID)
+            let imageURL = getImageURL(fileName: fileName) // 保存先のURLをゲット
+            try imageData.write(to: imageURL) // imageURLに画像を書き込む
+            return fileName
+        } catch {
+            print("Failed to save the image:", error)
+            return nil
+        }
+    }
+    func getImageURL(fileName: String) -> URL {
+        let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return docDir.appendingPathComponent(fileName)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 }
+extension ViewController  {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])  {
+        guard let location = locations.first else {return  }
+        locationManager.stopUpdatingLocation()
+        currentLocation = location
+        var region: MKCoordinateRegion = mapView.region
+        region.center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        region.span.latitudeDelta = 0.02
+        region.span.longitudeDelta = 0.02
+        mapView.setRegion(region, animated: true)
+     
+        
+    }
+    
+    
+}
+
+
 
