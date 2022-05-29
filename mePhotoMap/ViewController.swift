@@ -9,27 +9,31 @@ import UIKit
 import MapKit
 import CoreLocationUI
 import RealmSwift
-import SwiftUI
-class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate{
+//import SwiftUI
+class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,MKMapViewDelegate{
     let realm = try! Realm()
     
     let dt = Date()
     let dateFormatter = DateFormatter()
-    var  dateString:String!
-    var photoInfo = PhotoInfo()
+    var  dateString:String = ""
+    
     
     
     
     var locationManager:CLLocationManager!
+    
+
     var didStartUpdatingLocation = false
     var searchMapItems:[MKMapItem] = []
     var currentLocation:CLLocation!
     @IBOutlet weak var mapView: MKMapView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.mapView.delegate = self
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
 //        createLocationButton()
         // Do any additional setup after loading the view.
     }
@@ -124,7 +128,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     
     private func updateMap(){
         
-        print("Location:\(currentLocation?.coordinate.latitude),\(currentLocation.coordinate.longitude)")
+        print("Location:\(currentLocation.coordinate.latitude),\(currentLocation.coordinate.longitude)")
         let now = Date()
         let delta = now.timeIntervalSince(currentLocation.timestamp)
         print("This location was obtained \(delta)second ago")
@@ -146,11 +150,36 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     }
     
     private func showPins(){
-        guard let currentLocation = currentLocation else {return}
-        let  annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2DMake (currentLocation.coordinate.latitude,currentLocation.coordinate.longitude)
-        mapView.addAnnotation(annotation)
+        let photoInfoArray = realm.objects(PhotoInfo.self)
+        
+        
+        for photoInfo in photoInfoArray {
+            let longtitude = photoInfo.longtitude
+            let latitude = photoInfo.latitude
+            
+            guard let longtitude = longtitude as? CLLocationDegrees , let  latitude = latitude as? CLLocationDegrees  else  {return}
+            let  annotation = MKPointAnnotation()
+            
+            annotation.coordinate = CLLocationCoordinate2DMake (latitude,longtitude)
+            
+            mapView.addAnnotation(annotation)
+          
+            
+                  
+                
+            
+            }
+    
+    
+   
     }
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print("TAPPED")
+        performSegue(withIdentifier: "ToInfo", sender: nil)
+        
+            }
+        
+    
     
     func presentPickerController(sourceType:UIImagePickerController.SourceType){
         if UIImagePickerController.isSourceTypeAvailable(sourceType){
@@ -163,7 +192,9 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             return picker.dismiss(animated: true) }
+        let photoInfo = PhotoInfo()
         let imageURLStr =   saveImage(image: image)
+        
         photoInfo.imageFileName = imageURLStr
         photoInfo.createdAt = dateString
         photoInfo.latitude = currentLocation.coordinate.latitude
@@ -184,7 +215,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
         dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHms", options: 0, locale: Locale(identifier: "ja_JP"))
         dateString = dateFormatter.string(from: Date())
         print(dateString)
-        return dateString
+        
         
         
         
@@ -197,6 +228,8 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
         presentPickerController(sourceType: .camera)
         updateMap()
         dateGet()
+        
+        
     }
     
     //    func saveLocationLatitude() {
@@ -253,12 +286,42 @@ extension ViewController  {
         region.span.latitudeDelta = 0.02
         region.span.longitudeDelta = 0.02
         mapView.setRegion(region, animated: true)
-     
-        
+
+
     }
-    
-    
+
+
 }
+//extension ViewController {
+
+
+
+//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//           //アノテーションビューを作成する。
+//           let pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
+//
+//           //吹き出しを表示可能に。
+//           pinView.canShowCallout = true
+//
+//           let button = UIButton()
+//           button.frame = CGRect(x:0,y:0,width:40,height:40)
+//           button.setTitle("OK", for: .normal)
+//           button.setTitleColor(UIColor.white, for: .normal)
+//           button.backgroundColor = UIColor.blue
+//           button.addTarget(self, action: #selector(sendLocation), for: .touchUpInside)
+//           //右側にボタンを追加
+//           pinView.rightCalloutAccessoryView = button
+//           return pinView
+//       }
+//
+//       //OKボタン押下時の処理
+//    @objc func sendLocation(){
+//        performSegue(withIdentifier: "ToInfo", sender: nil)
+//
+//      }
+//
+//}
+
 
 
 

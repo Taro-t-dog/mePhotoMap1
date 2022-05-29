@@ -23,19 +23,13 @@ class InfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getPhotoInfoData()
+      
         
 
         // Do any additional setup after loading the view.
     }
-    func getPhotoInfoData() {
-        photoInfos = Array(realm.objects(PhotoInfo.self)).reversed()
-        
-    }
-    func getImageURL(fileName: String) -> URL {
-           let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-           return docDir.appendingPathComponent(fileName)
-       }
+    
+    
     
     
     
