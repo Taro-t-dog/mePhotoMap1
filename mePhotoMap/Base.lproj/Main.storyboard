@@ -204,8 +204,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="北35.55466°, 東139.64440°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ocp-Dw-Q4Z">
-                                <rect key="frame" x="32" y="606" width="350" height="19"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="北35.55466°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ocp-Dw-Q4Z">
+                                <rect key="frame" x="32" y="606" width="108" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -240,6 +240,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="共有する"/>
+                                <connections>
+                                    <action selector="onToppedUPloadButton" destination="d2k-Ae-oBm" eventType="touchUpInside" id="Q3p-R4-MOl"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TG2-sV-jSt">
                                 <rect key="frame" x="66" y="733" width="287" height="31"/>
@@ -253,6 +256,13 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="東139.64440°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MC5-qZ-dpG">
+                                <rect key="frame" x="148" y="606" width="109" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="pWj-SY-Ghy"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -261,6 +271,7 @@
                         <outlet property="addressLabel" destination="big-6g-qrO" id="x0y-Sm-oaB"/>
                         <outlet property="dateLabel" destination="6Gk-Xs-jeQ" id="Xwn-49-oWe"/>
                         <outlet property="longtitudeAndLatitude" destination="ocp-Dw-Q4Z" id="nAC-A2-jBB"/>
+                        <outlet property="longtitudeLabel" destination="MC5-qZ-dpG" id="ypZ-6L-7Sz"/>
                         <outlet property="photoImageView" destination="mhc-JT-bec" id="wms-ZZ-G6J"/>
                     </connections>
                 </viewController>

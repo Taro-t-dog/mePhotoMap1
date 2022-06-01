@@ -16,7 +16,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     let dt = Date()
     let dateFormatter = DateFormatter()
     var  dateString:String = ""
-    
+    var photoInfoArray : [PhotoInfo] = []
     
     
     
@@ -150,7 +150,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     }
     
     private func showPins(){
-        let photoInfoArray = realm.objects(PhotoInfo.self)
+         photoInfoArray = Array(realm.objects(PhotoInfo.self))
         
         
         for photoInfo in photoInfoArray {
@@ -169,15 +169,33 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
                 
             
             }
+        
     
     
    
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("TAPPED")
-        performSegue(withIdentifier: "ToInfo", sender: nil)
+        if let annotation = view.annotation{
+            
+            performSegue(withIdentifier: "ToInfo", sender: nil)
+                }
         
-            }
+        
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "ToInfo" {
+            let nextView = self.navigationController?.viewControllers[0] as!InfoViewController
+            nextView.date = self.dateString
+            nextView.longtitude = 
+            nextView.latitude =
+            
+            
+            
+            
+ }
+    }
+    
         
     
     
