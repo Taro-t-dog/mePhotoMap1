@@ -39,6 +39,7 @@
                                 </state>
                                 <connections>
                                     <action selector="onTappedCameraButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ugd-4v-lu8"/>
+                                    <segue destination="ZgR-8y-MYb" kind="show" identifier="ToInfo" id="fRe-0z-h6a"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -54,7 +55,6 @@
                     <navigationItem key="navigationItem" id="Rz6-HI-1LH"/>
                     <connections>
                         <outlet property="mapView" destination="ift-V8-KPQ" id="ZjZ-Dw-M1R"/>
-                        <segue destination="ZgR-8y-MYb" kind="show" identifier="ToInfo" id="BL1-Wd-AEZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -78,7 +78,7 @@
                                             <constraint firstAttribute="height" constant="808" id="8qL-Wy-LiQ"/>
                                         </constraints>
                                         <connections>
-                                            <segue destination="d2k-Ae-oBm" kind="embed" id="DkM-gi-7C9"/>
+                                            <segue destination="d2k-Ae-oBm" kind="embed" identifier="ToInfo" id="DkM-gi-7C9"/>
                                         </connections>
                                     </containerView>
                                 </subviews>
@@ -267,6 +267,7 @@
                         <viewLayoutGuide key="safeArea" id="pWj-SY-Ghy"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="82G-NY-ngk"/>
                     <connections>
                         <outlet property="addressLabel" destination="big-6g-qrO" id="x0y-Sm-oaB"/>
                         <outlet property="dateLabel" destination="6Gk-Xs-jeQ" id="Xwn-49-oWe"/>
@@ -277,7 +278,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ewv-aA-qY4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2405.7971014492755" y="101.78571428571428"/>
+            <point key="canvasLocation" x="2583" y="114"/>
         </scene>
     </scenes>
     <resources>

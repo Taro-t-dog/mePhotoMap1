@@ -12,7 +12,7 @@ import UIKit
 
 
 class PhotoInfo: Object {
-    @objc dynamic var latitude:CLLocationDegrees  = 0.0
+    @objc dynamic var latitude:CLLocationDegrees = 0.0
     @objc dynamic var longtitude:CLLocationDegrees = 0.0
     @objc dynamic var createdAt:String?
     @objc dynamic var imageFileName: String?

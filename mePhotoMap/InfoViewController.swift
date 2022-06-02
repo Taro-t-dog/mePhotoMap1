@@ -29,8 +29,9 @@ class InfoViewController: UIViewController {
         super.viewDidLoad()
         //getInfoData()
         
-        longtitudeLabel.text = ("北\(photoInfo.latitude)")
-        latitudeLabel.text = ("東\(photoInfo.longtitude)")
+        longtitudeLabel?.text = ("北\(photoInfo.latitude)")
+        latitudeLabel?.text = ("東\(photoInfo.longtitude)")
+        
         
         
        
@@ -74,7 +75,7 @@ class InfoViewController: UIViewController {
     
 
 
-    }
+    
    
     
     
@@ -82,30 +83,31 @@ class InfoViewController: UIViewController {
     
     
     
-//    func convert(latitude: CLLocationDegrees, longtitude: CLLocationDegrees) -> String{
-//        let photoInfoArray = realm.objects(PhotoInfo.self)
-//         for photoInfo in photoInfoArray {
-//            let longtitude = photoInfo.longtitude
-//            let latitude = photoInfo.latitude
-//            let geocorder = CLGeocoder()
-//            let location = CLLocation(latitude: latitude, longitude: longtitude)
-//
-//
-//            geocorder.reverseGeocodeLocation(location) { (placeMarks, error) in
-//                if let placeMark = placeMarks?.first {
-//                    self.addressString = """
-//                    郵便番号：\(placeMark.postalCode ?? "検出不可")
-//                    名前：\(placeMark.name ?? "検出不可")
-//                    都道府県：\(placeMark.administrativeArea ?? "検出不可")
-//                    市区町村：\(placeMark.locality ?? "検出不可")
-//                """
-//                   self.addressLabel.text = self.addressString
-//                }
-//            }
-//        }
-//        return addressString
-//
-//    }
+    func convert(latitude: CLLocationDegrees, longtitude: CLLocationDegrees) -> String{
+        
+         
+            let longtitude = photoInfo.longtitude
+            let latitude = photoInfo.latitude
+            let geocorder = CLGeocoder()
+            let location = CLLocation(latitude: latitude, longitude: longtitude)
+
+
+            geocorder.reverseGeocodeLocation(location) { (placeMarks, error) in
+                if let placeMark = placeMarks?.first {
+                    self.addressString = """
+                    郵便番号：\(placeMark.postalCode ?? "検出不可")
+                    名前：\(placeMark.name ?? "検出不可")
+                    都道府県：\(placeMark.administrativeArea ?? "検出不可")
+                    市区町村：\(placeMark.locality ?? "検出不可")
+                """
+                   self.addressLabel.text = self.addressString
+                }
+            }
+        
+        return addressString
+
+    }
+}
     
 
     

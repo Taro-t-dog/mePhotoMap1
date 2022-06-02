@@ -180,7 +180,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     }
 //    情報を渡す
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let annotation = view.annotation as?PhotoInfoAnnotation{
+        if let annotation = view.annotation as? PhotoInfoAnnotation{
             selectedPhotoInfo = annotation.photoInfo
             
             
@@ -192,7 +192,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "ToInfo" {
-            let nextView = self.navigationController?.viewControllers[0] as!InfoViewController
+            let nextView = segue.destination  as! InfoViewController
             nextView.photoInfo.createdAt = self.selectedPhotoInfo.createdAt
             nextView.photoInfo.longtitude = self.selectedPhotoInfo.latitude
             nextView.photoInfo.latitude = self.selectedPhotoInfo.longtitude
