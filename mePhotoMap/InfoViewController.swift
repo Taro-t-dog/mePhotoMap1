@@ -12,11 +12,8 @@ class InfoViewController: UIViewController {
     let realm = try! Realm()
  
     
-     var photoInfos = [PhotoInfo]()
-    var photoURL:String!
-    var latitude:CLLocationDegrees
-    var longtitude:CLLocationDegrees
-    var date:String
+     
+    
     let photoInfo = PhotoInfo()
     
     @IBOutlet var dateLabel: UILabel!
@@ -25,12 +22,15 @@ class InfoViewController: UIViewController {
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var addressLabel: UILabel!
     
-    @IBOutlet weak var longtitudeAndLatitude: UILabel!
+    @IBOutlet weak var latitudeLabel: UILabel!
     
     @IBOutlet weak var longtitudeLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         //getInfoData()
+        
+        longtitudeLabel.text = ("北\(photoInfo.latitude)")
+        latitudeLabel.text = ("東\(photoInfo.longtitude)")
         
         
        
@@ -40,46 +40,42 @@ class InfoViewController: UIViewController {
 
         // Do any additional setup after loading the view.
 }
+    @IBAction func onToppedUPloadButton() {
+        if photoImageView.image != nil {
+            let activityVC = UIActivityViewController(activityItems: [photoImageView!,"#mePhotoMap"], applicationActivities: nil)
+            self.present(activityVC,animated: true,completion: nil)
+        }else{
+            print("画像がありません")
+        }
+    }
     
     
-//    func getInfoData() {
-//
-//    photoInfos = Array(realm.objects(PhotoInfo.self)).reversed()
-//
-//
-//
-//    }
-//
-//    func  getInfoDetails() {
-//        for _ in photoInfos {
-//            dateLabel.text = photoInfo.createdAt
-//            longtitudeAndLatitude.text = String( photoInfo.latitude)
-//            longtitudeLabel.text = String(photoInfo.longtitude)
-//        }
-//
-//    }
-//    func getImage() {
-//        if let imageFileName = photoInfo.imageFileName {
-//                  let path = getImageURL(fileName: imageFileName).path // 画像のパスを取得
-//                  if FileManager.default.fileExists(atPath: path) { // pathにファイルが存在しているかチェック
-//                      if let imageData = UIImage(contentsOfFile: path) { // pathに保存されている画像を取得
-//                          photoImageView.image = imageData
-//                      } else {
-//                          print("Failed to load the image. path = ", path)
-//                      }
-//                  } else {
-//                      print("Image file not found. path = ", path)
-//                  }
-//              }
-//
-//          }
-//
-//    func getImageURL(fileName: String) -> URL {
-//           let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-//           return docDir.appendingPathComponent(fileName)
-//       }
     
+    func getImage() {
+        if let imageFileName = photoInfo.imageFileName {
+                  let path = getImageURL(fileName: imageFileName).path // 画像のパスを取得
+                  if FileManager.default.fileExists(atPath: path) { // pathにファイルが存在しているかチェック
+                      if let imageData = UIImage(contentsOfFile: path) { // pathに保存されている画像を取得
+                          photoImageView.image = imageData
+                      } else {
+                          print("Failed to load the image. path = ", path)
+                      }
+                  } else {
+                      print("Image file not found. path = ", path)
+                  }
+              }
+
+          }
+
+    func getImageURL(fileName: String) -> URL {
+           let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+           return docDir.appendingPathComponent(fileName)
+       }
     
+
+
+    }
+   
     
     
     
@@ -110,14 +106,8 @@ class InfoViewController: UIViewController {
 //        return addressString
 //
 //    }
-    @IBAction func onToppedUPloadButton() {
-        if photoImageView.image != nil {
-            let activityVC = UIActivityViewController(activityItems: [photoImageView!,"#mePhotoMap"], applicationActivities: nil)
-            self.present(activityVC,animated: true,completion: nil)
-        }else{
-            print("画像がありません")
-        }
-    }
+    
+
     
     /*
     // MARK: - Navigation
@@ -131,4 +121,4 @@ class InfoViewController: UIViewController {
     */
 
 
-}
+

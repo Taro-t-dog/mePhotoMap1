@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		12E6386D8BB5FE425C35794C /* Pods_mePhotoMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88B2D567F174D64D3A26682 /* Pods_mePhotoMap.framework */; };
+		9F86B6D8284889D9005254A2 /* PhotoInfoAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F86B6D7284889D9005254A2 /* PhotoInfoAnnotation.swift */; };
 		9F8BC22E2839F718008F5869 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8BC22D2839F718008F5869 /* AppDelegate.swift */; };
 		9F8BC2302839F718008F5869 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8BC22F2839F718008F5869 /* SceneDelegate.swift */; };
 		9F8BC2322839F718008F5869 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8BC2312839F718008F5869 /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		9C5EF936A97F404B1CB0C673 /* Pods-mePhotoMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mePhotoMap.debug.xcconfig"; path = "Target Support Files/Pods-mePhotoMap/Pods-mePhotoMap.debug.xcconfig"; sourceTree = "<group>"; };
+		9F86B6D7284889D9005254A2 /* PhotoInfoAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoInfoAnnotation.swift; sourceTree = "<group>"; };
 		9F8BC22A2839F718008F5869 /* mePhotoMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mePhotoMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F8BC22D2839F718008F5869 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9F8BC22F2839F718008F5869 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				9F8BC23B2839F71C008F5869 /* Info.plist */,
 				9F8BC241283A1318008F5869 /* InfoViewController.swift */,
 				9F8BC283283C7FC3008F5869 /* photoInfo.swift */,
+				9F86B6D7284889D9005254A2 /* PhotoInfoAnnotation.swift */,
 			);
 			path = mePhotoMap;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				9F8BC284283C7FC3008F5869 /* photoInfo.swift in Sources */,
 				9F8BC242283A1319008F5869 /* InfoViewController.swift in Sources */,
 				9F8BC2302839F718008F5869 /* SceneDelegate.swift in Sources */,
+				9F86B6D8284889D9005254A2 /* PhotoInfoAnnotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

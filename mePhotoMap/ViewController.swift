@@ -15,8 +15,9 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     
     let dt = Date()
     let dateFormatter = DateFormatter()
-    var  dateString:String = ""
+    var dateString:String = ""
     var photoInfoArray : [PhotoInfo] = []
+    var selectedPhotoInfo:PhotoInfo!
     
     
     
@@ -158,12 +159,15 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
             let latitude = photoInfo.latitude
             
             guard let longtitude = longtitude as? CLLocationDegrees , let  latitude = latitude as? CLLocationDegrees  else  {return}
-            let  annotation = MKPointAnnotation()
+            let  annotation = PhotoInfoAnnotation(photoInfo: photoInfo)
             
             annotation.coordinate = CLLocationCoordinate2DMake (latitude,longtitude)
             
+            
+            
+            
             mapView.addAnnotation(annotation)
-          
+        
             
                   
                 
@@ -176,7 +180,9 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     }
 //    情報を渡す
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let annotation = view.annotation{
+        if let annotation = view.annotation as?PhotoInfoAnnotation{
+            selectedPhotoInfo = annotation.photoInfo
+            
             
             performSegue(withIdentifier: "ToInfo", sender: nil)
                 }
@@ -187,9 +193,10 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
         
         if segue.identifier == "ToInfo" {
             let nextView = self.navigationController?.viewControllers[0] as!InfoViewController
-            nextView.date = self.dateString
-            nextView.longtitude = 
-            nextView.latitude =
+            nextView.photoInfo.createdAt = self.selectedPhotoInfo.createdAt
+            nextView.photoInfo.longtitude = self.selectedPhotoInfo.latitude
+            nextView.photoInfo.latitude = self.selectedPhotoInfo.longtitude
+            nextView.photoInfo.imageFileName = self.selectedPhotoInfo.imageFileName
             
             
             

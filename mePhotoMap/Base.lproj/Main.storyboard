@@ -270,7 +270,7 @@
                     <connections>
                         <outlet property="addressLabel" destination="big-6g-qrO" id="x0y-Sm-oaB"/>
                         <outlet property="dateLabel" destination="6Gk-Xs-jeQ" id="Xwn-49-oWe"/>
-                        <outlet property="longtitudeAndLatitude" destination="ocp-Dw-Q4Z" id="nAC-A2-jBB"/>
+                        <outlet property="latitudeLabel" destination="ocp-Dw-Q4Z" id="3L5-kQ-JyD"/>
                         <outlet property="longtitudeLabel" destination="MC5-qZ-dpG" id="ypZ-6L-7Sz"/>
                         <outlet property="photoImageView" destination="mhc-JT-bec" id="wms-ZZ-G6J"/>
                     </connections>
