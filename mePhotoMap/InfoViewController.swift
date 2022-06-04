@@ -31,6 +31,7 @@ class InfoViewController: UIViewController {
         
         longtitudeLabel?.text = ("北\(photoInfo.latitude)")
         latitudeLabel?.text = ("東\(photoInfo.longtitude)")
+        dateLabel?.text = photoInfo.createdAt
         
         
         
@@ -72,7 +73,7 @@ class InfoViewController: UIViewController {
            let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
            return docDir.appendingPathComponent(fileName)
        }
-    
+
 
 
     
@@ -84,8 +85,8 @@ class InfoViewController: UIViewController {
     
     
     func convert(latitude: CLLocationDegrees, longtitude: CLLocationDegrees) -> String{
-        
-         
+
+
             let longtitude = photoInfo.longtitude
             let latitude = photoInfo.latitude
             let geocorder = CLGeocoder()
@@ -103,7 +104,7 @@ class InfoViewController: UIViewController {
                    self.addressLabel.text = self.addressString
                 }
             }
-        
+
         return addressString
 
     }

@@ -17,7 +17,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     let dateFormatter = DateFormatter()
     var dateString:String = ""
     var photoInfoArray : [PhotoInfo] = []
-    var selectedPhotoInfo:PhotoInfo!
+    var selectedPhotoInfo:PhotoInfo?
     
     
     
@@ -178,9 +178,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     
    
     }
-//    情報を渡す
+    
+    
+   
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let annotation = view.annotation as? PhotoInfoAnnotation{
+        if let annotation = view.annotation  as? PhotoInfoAnnotation {
             selectedPhotoInfo = annotation.photoInfo
             
             
@@ -190,17 +192,18 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
         
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+
         if segue.identifier == "ToInfo" {
             let nextView = segue.destination  as! InfoViewController
-            nextView.photoInfo.createdAt = self.selectedPhotoInfo.createdAt
-            nextView.photoInfo.longtitude = self.selectedPhotoInfo.latitude
-            nextView.photoInfo.latitude = self.selectedPhotoInfo.longtitude
-            nextView.photoInfo.imageFileName = self.selectedPhotoInfo.imageFileName
             
-            
-            
-            
+            nextView.photoInfo.createdAt = self.selectedPhotoInfo?.createdAt
+            nextView.photoInfo.longtitude = self.selectedPhotoInfo?.latitude ?? 0.0
+            nextView.photoInfo.latitude = self.selectedPhotoInfo?.longtitude ?? 0.0
+            nextView.photoInfo.imageFileName = self.selectedPhotoInfo?.imageFileName
+
+
+
+
  }
     }
     
@@ -225,7 +228,10 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
         photoInfo.createdAt = dateString
         photoInfo.latitude = currentLocation.coordinate.latitude
         photoInfo.longtitude = currentLocation.coordinate.longitude
-        
+        print(photoInfo.createdAt)
+        print( photoInfo.imageFileName)
+        print( photoInfo.latitude)
+        print( photoInfo.longtitude)
         
         try!realm.write({
             realm.add(photoInfo)
@@ -238,7 +244,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     func dateGet() -> String{
         
         // DateFormatter を使用して書式とロケールを指定する
-        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHms", options: 0, locale: Locale(identifier: "ja_JP"))
+         dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHms", options: 0, locale: Locale(identifier: "ja_JP"))
         dateString = dateFormatter.string(from: Date())
         print(dateString)
         
@@ -253,7 +259,8 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     @IBAction func onTappedCameraButton(_ sender: Any) {
         presentPickerController(sourceType: .camera)
         updateMap()
-        dateGet()
+       _ =  dateGet()
+    
         
         
     }
