@@ -12,7 +12,7 @@ import RealmSwift
 //import SwiftUI
 class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,MKMapViewDelegate{
     let realm = try! Realm()
-    
+    @IBOutlet var contentView: UIView!
     let dt = Date()
     let dateFormatter = DateFormatter()
     var dateString:String = ""
@@ -182,11 +182,17 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     
    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+     
         if let annotation = view.annotation  as? PhotoInfoAnnotation {
             selectedPhotoInfo = annotation.photoInfo
+//            let createdAt = selectedPhotoInfo?.createdAt
+//            let longtitude = selectedPhotoInfo?.longtitude
+//            let latitude = selectedPhotoInfo?.latitude
+//            let imageFileName = selectedPhotoInfo?.imageFileName
+//
             
             
-            performSegue(withIdentifier: "ToInfo", sender: nil)
+            performSegue(withIdentifier: "ToInfo", sender:nil)
                 }
         
         
@@ -194,17 +200,17 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if segue.identifier == "ToInfo" {
-            let nextView = segue.destination  as! InfoViewController
+//            let data: (date: String , lat:CLLocationDegrees , log: CLLocationDegrees , imFileName: String ) = sender as? (String, CLLocationDegrees, CLLocationDegrees, String),
+        
+            let nextView = segue.destination  as? InfoViewController
             
-            nextView.photoInfo.createdAt = self.selectedPhotoInfo?.createdAt
-            nextView.photoInfo.longtitude = self.selectedPhotoInfo?.latitude ?? 0.0
-            nextView.photoInfo.latitude = self.selectedPhotoInfo?.longtitude ?? 0.0
-            nextView.photoInfo.imageFileName = self.selectedPhotoInfo?.imageFileName
-
-
-
-
- }
+            nextView?.recievedLatitude = selectedPhotoInfo!.latitude
+            nextView?.recievedLongitude = selectedPhotoInfo!.longtitude
+//            nextView.photoInfo.createdAt =
+//            nextView.photoInfo.longtitude = data.log
+//            nextView.photoInfo.latitude = data.lat
+//            nextView.photoInfo.imageFileName = data.imFileName
+        }
     }
     
         
@@ -238,6 +244,8 @@ class ViewController: UIViewController , CLLocationManagerDelegate,UINavigationC
         })
         
         picker.dismiss(animated: true)
+        
+         print( realm.objects(PhotoInfo.self))
         
         
     }
